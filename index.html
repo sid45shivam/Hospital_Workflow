@@ -911,6 +911,38 @@
             document.getElementById('patient-search').addEventListener('input', filterPatients);
             document.getElementById('filter-severity').addEventListener('change', filterPatients);
         });
+document.addEventListener("DOMContentLoaded", () => {
+    const popup = document.getElementById("welcome-popup");
+    const closeBtn = document.getElementById("popup-close");
+
+    // Fade in popup after slight delay for smoothness
+    setTimeout(() => {
+        popup.classList.remove("opacity-0", "pointer-events-none");
+        popup.firstElementChild.classList.remove("scale-95");
+    }, 200);
+
+    // Close animation
+    closeBtn.addEventListener("click", () => {
+        popup.classList.add("opacity-0", "pointer-events-none");
+        popup.firstElementChild.classList.add("scale-95");
+    });
+});
+
+
     </script>
+    <div id="welcome-popup" class="fixed inset-0 flex items-center justify-center z-[9999] bg-black/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+  <div class="bg-white dark:bg-card p-8 rounded-2xl shadow-2xl w-[90%] max-w-sm transform scale-95 transition-transform duration-300">
+    <h2 class="text-2xl font-bold mb-3 text-slate-800 dark:text-slate-100">
+      RUSHI KI MKB
+    </h2>
+
+    <p class="text-slate-600 dark:text-slate-300 text-sm mb-6 leading-relaxed">
+      LUND LUND LUND GLIM GURGAON LUND.
+    </p>
+
+    <button id="popup-close" class="w-full bg-primary hover:bg-blue-700 text-white py-2.5 rounded-xl transition-all">
+      Continue
+    </button>
+  </div>
 </body>
 </html>
