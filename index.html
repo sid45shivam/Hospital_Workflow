@@ -34,44 +34,126 @@
                 }
             }
         }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const popup = document.getElementById("welcome-popup");
+            const closeBtn = document.getElementById("popup-close");
+
+            // Smooth fade + scale animation
+            setTimeout(() => {
+                popup.classList.remove("opacity-0", "pointer-events-none");
+                popup.firstElementChild.classList.remove("scale-95");
+            }, 150);
+
+            // Close animation
+            closeBtn.addEventListener("click", () => {
+                popup.firstElementChild.classList.add("scale-95");
+                popup.classList.add("opacity-0", "pointer-events-none");
+            });
+        });
     </script>
     <style>
         /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
-        .dark ::-webkit-scrollbar-thumb { background-color: #475569; }
-        
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background-color: #475569;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Map Animations */
         .path-line {
             stroke-dasharray: 10;
             animation: dash 1s linear infinite;
         }
+
         .pulse-dot {
             animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
         }
+
         @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.8; }
-            50% { transform: scale(1.5); opacity: 0; }
-            100% { transform: scale(0.8); opacity: 0; }
+            0% {
+                transform: scale(0.8);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
         }
+        
         .floor-btn.active {
             background-color: #2563eb;
             color: white;
             border-color: #2563eb;
         }
+
+        /* Custom Styles for Graph */
+        .graph-bar {
+            transition: height 1s ease-out;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-slate-800 dark:bg-dark dark:text-slate-100 transition-colors duration-300 font-sans overflow-hidden">
 
+    <!-- Beautiful Popup (Spacious Version) -->
+    <div id="welcome-popup" class="fixed inset-0 flex items-center justify-center z-[9999] bg-black/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white dark:bg-card p-10 rounded-2xl shadow-2xl w-[92%] max-w-lg transform scale-95 transition-transform duration-300">
+            <h2 class="text-3xl font-bold mb-6 text-slate-800 dark:text-slate-100 leading-snug">
+                Trip Time Process Control<br>MGX Hospital
+            </h2>
+            <p class="text-slate-600 dark:text-slate-300 text-base mb-6 leading-relaxed">
+                The potential solution to eliminate bottlenecks, loopholes, and delays in the trip time process at MGX Hospital is to digitise the workflow for real-time monitoring and control.
+            </p>
+            <p class="text-slate-600 dark:text-slate-300 text-base mb-4 leading-relaxed">
+                This prototype includes:
+            </p>
+            <ul class="text-slate-600 dark:text-slate-300 text-base mb-10 space-y-2 list-disc pl-6 leading-relaxed">
+                <li>Real-time monitoring</li>
+                <li>Patient triage</li>
+                <li>Equipment tracking</li>
+                <li>Active complaints</li>
+                <li>Availability metrics</li>
+            </ul>
+            <button id="popup-close" class="w-full bg-primary hover:bg-blue-700 text-white py-3 rounded-xl text-lg transition-all">
+                Continue
+            </button>
+        </div>
+    </div>
+
     <div id="app" class="flex h-screen w-full">
-        
         <!-- Sidebar -->
         <aside id="sidebar" class="w-64 bg-white dark:bg-card border-r border-gray-200 dark:border-gray-700 flex flex-col transition-all duration-300 absolute md:relative z-20 h-full hidden md:flex">
             <div class="p-6 flex items-center justify-between">
@@ -101,7 +183,12 @@
                     <i data-lucide="stethoscope" class="w-5 h-5"></i>
                     Equipment
                 </button>
-                <button onclick="navigate('complaints')" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
+                <!-- New Transporter App Button -->
+                <button onclick="navigate('transporter')" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors border-t border-gray-100 dark:border-gray-700 mt-2 pt-4">
+                    <i data-lucide="truck" class="w-5 h-5 text-indigo-500"></i>
+                    Transporter App
+                </button>
+                <button onclick="navigate('complaints')" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors mt-2">
                     <i data-lucide="message-square-warning" class="w-5 h-5"></i>
                     Complaints
                     <span id="complaint-badge" class="ml-auto bg-danger text-white text-xs px-2 py-0.5 rounded-full">1</span>
@@ -147,10 +234,24 @@
 
             <!-- Views -->
             <div id="content-area" class="flex-1 overflow-y-auto p-4 md:p-6 relative">
-                
+
                 <!-- Dashboard View -->
                 <div id="view-dashboard" class="view-section fade-in space-y-6">
-                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    
+                    <!-- 4. Why Manual SOP Fails Section (Collapsible) -->
+                    <details class="bg-white dark:bg-card rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden group">
+                        <summary class="p-4 font-bold cursor-pointer flex justify-between items-center hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-200">
+                            <span class="flex items-center gap-2"><i data-lucide="alert-triangle" class="w-5 h-5 text-warning"></i> Business Case: Why Manual SOP Fails</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 transition-transform group-open:rotate-180"></i>
+                        </summary>
+                        <div class="p-6 pt-2 text-sm text-slate-600 dark:text-slate-400 space-y-3 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-slate-800/50">
+                            <p class="flex items-start gap-2"><span class="text-lg">🚫</span> <span><strong>Lack of Visibility:</strong> Ward nurses spend 40% of time calling for status updates on patients/equipment.</span></p>
+                            <p class="flex items-start gap-2"><span class="text-lg">🚫</span> <span><strong>Resource Hoarding:</strong> Departments physically hide wheelchairs, creating artificial scarcity (~15% asset unavailability).</span></p>
+                            <p class="flex items-start gap-2"><span class="text-lg">🚫</span> <span><strong>No Accountability:</strong> Verbal orders are forgotten; digital logs ensure 100% auditability.</span></p>
+                        </div>
+                    </details>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="bg-white dark:bg-card p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                             <div class="flex justify-between items-start">
                                 <div>
@@ -200,6 +301,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- Dashboard Lists -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="lg:col-span-2 bg-white dark:bg-card rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
@@ -248,6 +350,43 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- 1. Performance Graph -->
+                    <div class="bg-white dark:bg-card p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mt-2">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100">KPI: Trip Time Reduction</h3>
+                                <p class="text-sm text-slate-500">Measurable impact of digital workflow intervention.</p>
+                            </div>
+                            <div class="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-3 py-1 rounded-full text-xs font-bold">
+                                Target Met
+                            </div>
+                        </div>
+                        <div class="flex items-end justify-center gap-12 h-56 w-full border-b border-gray-200 dark:border-gray-700 pb-2">
+                            <!-- Manual Bar -->
+                            <div class="w-32 flex flex-col items-center gap-3 group relative">
+                                <div class="absolute -top-6 text-sm font-bold text-slate-500">64 min</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-600 rounded-t-lg h-48 relative group-hover:bg-slate-300 dark:group-hover:bg-slate-500 transition-colors flex items-center justify-center">
+                                    <span class="text-xs font-bold text-slate-500 dark:text-slate-300 rotate-0">Baseline</span>
+                                </div>
+                                <div class="text-sm font-bold text-slate-600 dark:text-slate-400">Manual SOP</div>
+                            </div>
+                            <!-- Arrow -->
+                            <div class="mb-20 text-slate-400">
+                                <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                            </div>
+                            <!-- Digital Bar -->
+                            <div class="w-32 flex flex-col items-center gap-3 group">
+                                <div class="text-sm font-bold text-emerald-600 dark:text-emerald-400">30 min</div>
+                                <div class="w-full bg-success rounded-t-lg h-[47%] relative group-hover:bg-emerald-600 transition-colors shadow-lg shadow-emerald-500/20">
+                                    <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-success text-white text-[10px] px-3 py-1 rounded-full font-bold whitespace-nowrap shadow-md border-2 border-white dark:border-dark">
+                                        -53% Time
+                                    </div>
+                                </div>
+                                <div class="text-sm font-bold text-emerald-600 dark:text-emerald-400">Digital Flow</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Patients View -->
@@ -256,13 +395,13 @@
                         <h1 class="text-3xl font-serif font-bold text-slate-900 dark:text-white mb-1">Patient Triage</h1>
                         <p class="text-slate-500 dark:text-slate-400">Real-time overview of patient status and needs.</p>
                     </div>
+
                     <div class="space-y-3 mb-6 max-w-2xl">
                         <div class="relative">
                             <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5"></i>
-                            <input type="text" id="patient-search" placeholder="Search by name or ID..." 
-                                   class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-card focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-shadow">
+                            <input type="text" id="patient-search" placeholder="Search by name or ID..." class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-card focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-shadow">
                         </div>
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div class="relative">
                                 <select id="filter-severity" class="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-card appearance-none cursor-pointer outline-none focus:ring-2 focus:ring-primary">
                                     <option value="All">All Severities</option>
@@ -281,6 +420,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div id="patient-cards-container" class="space-y-4 max-w-2xl pb-10">
                         <!-- Populated by JS -->
                     </div>
@@ -292,29 +432,32 @@
                         <i data-lucide="arrow-left" class="w-4 h-4"></i>
                         Back to List
                     </button>
+
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
                         <div class="flex items-center gap-4">
-                             <div class="relative">
+                            <div class="relative">
                                 <img id="profile-avatar" src="" alt="Profile" class="w-20 h-20 rounded-full border-4 border-white dark:border-card shadow-lg bg-gray-200">
                                 <div id="profile-status-dot" class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-red-500 border-2 border-white dark:border-card"></div>
-                             </div>
-                             <div>
-                                 <h1 id="profile-name" class="text-3xl font-serif font-bold text-slate-900 dark:text-white">Patient Name</h1>
-                                 <p id="profile-id" class="text-slate-500 dark:text-slate-400">Patient ID: PXXX</p>
-                             </div>
+                            </div>
+                            <div>
+                                <h1 id="profile-name" class="text-3xl font-serif font-bold text-slate-900 dark:text-white">Patient Name</h1>
+                                <p id="profile-id" class="text-slate-500 dark:text-slate-400">Patient ID: PXXX</p>
+                            </div>
                         </div>
                         <button onclick="navigate('routing')" class="flex items-center gap-2 bg-success hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium shadow-sm transition-all transform hover:scale-105">
                             <i data-lucide="map" class="w-5 h-5"></i>
                             Locate Route to Test
                         </button>
                     </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="bg-white dark:bg-card rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                             <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-slate-200">Patient Details</h3>
                             <div class="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-4 mb-4">
                                 <span class="text-slate-500">Severity</span>
                                 <span id="profile-severity" class="font-bold text-danger flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full bg-danger"></span> Severe
+                                    <span class="w-2 h-2 rounded-full bg-danger"></span>
+                                    Severe
                                 </span>
                             </div>
                             <div class="space-y-4">
@@ -324,6 +467,7 @@
                                 <div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-gray-50 dark:bg-slate-800 flex items-center justify-center text-slate-400"><i data-lucide="move" class="w-4 h-4"></i></div><div><p class="text-xs text-slate-400">Mobility</p><p id="profile-mobility" class="font-medium text-sm">Wheelchair</p></div></div>
                             </div>
                         </div>
+
                         <div class="bg-white dark:bg-card rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                             <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-slate-200">Priority Tests</h3>
                             <div class="bg-gray-50 dark:bg-slate-800/50 rounded-lg p-4 border border-gray-100 dark:border-gray-700">
@@ -336,14 +480,16 @@
                                 </div>
                                 <p class="text-xs text-slate-500 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i>Avg: 5 mins (Min: 3, Max: 10)</p>
                             </div>
-                             <div class="mt-4 text-center"><button class="text-sm text-primary hover:underline">+ Add another test</button></div>
+                            <div class="mt-4 text-center"><button class="text-sm text-primary hover:underline">+ Add another test</button></div>
                         </div>
+
                         <div class="bg-white dark:bg-card rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                             <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-slate-200">Pre-Test Checklist: <span id="profile-checklist-title">X-Ray</span></h3>
                             <div class="space-y-3" id="profile-checklist-container"></div>
                         </div>
+
                         <div class="bg-white dark:bg-card rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-                             <div class="flex justify-between items-center mb-4">
+                            <div class="flex justify-between items-center mb-4">
                                 <h3 class="font-bold text-lg text-slate-800 dark:text-slate-200">Raise a Complaint</h3>
                                 <span class="text-xs border border-slate-200 dark:border-slate-600 px-2 py-0.5 rounded text-slate-500">Idle</span>
                             </div>
@@ -360,8 +506,9 @@
                         <h1 class="text-3xl font-serif font-bold text-slate-900 dark:text-white mb-1">Equipment Tracker</h1>
                         <p class="text-slate-500 dark:text-slate-400">Manage and locate hospital assets.</p>
                     </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                         <div class="bg-white dark:bg-card p-6 rounded-xl shadow-sm border-l-4 border-green-500">
+                        <div class="bg-white dark:bg-card p-6 rounded-xl shadow-sm border-l-4 border-green-500">
                             <h4 class="font-bold text-lg">Ventilators</h4>
                             <p class="text-3xl font-bold mt-2">2 <span class="text-sm text-slate-400 font-normal">/ 5 Available</span></p>
                             <div class="mt-4 h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-green-500 w-[40%]"></div></div>
@@ -371,12 +518,13 @@
                             <p class="text-3xl font-bold mt-2">3 <span class="text-sm text-slate-400 font-normal">/ 8 Available</span></p>
                             <div class="mt-4 h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-yellow-500 w-[37%]"></div></div>
                         </div>
-                         <div class="bg-white dark:bg-card p-6 rounded-xl shadow-sm border-l-4 border-blue-500">
+                        <div class="bg-white dark:bg-card p-6 rounded-xl shadow-sm border-l-4 border-blue-500">
                             <h4 class="font-bold text-lg">Wheelchairs</h4>
                             <p class="text-3xl font-bold mt-2">8 <span class="text-sm text-slate-400 font-normal">/ 10 Available</span></p>
                             <div class="mt-4 h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-blue-500 w-[80%]"></div></div>
                         </div>
                     </div>
+
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-10">
                         <div class="space-y-6">
                             <div class="bg-white dark:bg-card rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
@@ -386,7 +534,7 @@
                                     Find Nearest
                                 </button>
                             </div>
-                             <div class="bg-white dark:bg-card rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
+                            <div class="bg-white dark:bg-card rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
                                 <h3 class="font-bold text-lg mb-4">Filters</h3>
                                 <div class="space-y-4">
                                     <div>
@@ -402,8 +550,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                         <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1 block">Type</label>
-                                         <div class="relative">
+                                        <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1 block">Type</label>
+                                        <div class="relative">
                                             <select id="eq-filter-type" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-800 appearance-none cursor-pointer outline-none focus:ring-2 focus:ring-primary transition-shadow">
                                                 <option value="All">All Types</option>
                                                 <option value="Ventilator">Ventilator</option>
@@ -431,7 +579,7 @@
                 </div>
 
                 <div id="view-complaints" class="view-section hidden fade-in">
-                     <div class="bg-white dark:bg-card rounded-xl shadow-sm p-6">
+                    <div class="bg-white dark:bg-card rounded-xl shadow-sm p-6">
                         <div class="flex justify-between items-center mb-6">
                             <h3 class="font-bold text-lg">Complaint Management</h3>
                             <div class="text-sm text-slate-500">Total Active: <span class="text-danger font-bold">1</span></div>
@@ -457,7 +605,111 @@
                                 </div>
                             </div>
                         </div>
-                     </div>
+                    </div>
+                </div>
+
+                <!-- 2. New Transporter View -->
+                <div id="view-transporter" class="view-section hidden fade-in max-w-md mx-auto">
+                    <div class="bg-dark text-white p-5 rounded-t-xl flex justify-between items-center shadow-lg relative overflow-hidden">
+                         <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 blur-xl"></div>
+                         <div class="relative">
+                             <h2 class="font-bold text-xl tracking-wide">Transporter App</h2>
+                             <div class="flex items-center gap-2 mt-1">
+                                 <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                                 <p class="text-xs text-slate-300 font-mono">T-102 (Steve) • Online</p>
+                             </div>
+                         </div>
+                         <i data-lucide="smartphone" class="w-8 h-8 text-white/50 relative"></i>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-card shadow-xl border-x border-b border-gray-100 dark:border-gray-700 rounded-b-xl min-h-[400px] flex flex-col">
+                        <!-- Stats Row -->
+                        <div class="grid grid-cols-2 divide-x divide-gray-100 dark:divide-gray-700 border-b border-gray-100 dark:border-gray-700">
+                            <div class="p-4 text-center">
+                                <span class="block text-2xl font-bold text-primary">4</span>
+                                <span class="text-xs text-slate-500 uppercase font-bold">Jobs Done</span>
+                            </div>
+                            <div class="p-4 text-center">
+                                <span class="block text-2xl font-bold text-success">15m</span>
+                                <span class="text-xs text-slate-500 uppercase font-bold">Avg Trip</span>
+                            </div>
+                        </div>
+
+                        <!-- Active Job Card (Updated per request) -->
+                        <div class="p-6 flex-1 flex flex-col gap-6 overflow-y-auto">
+                            
+                            <!-- Top Header -->
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Job</p>
+                                    <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Job #T-001</h3>
+                                </div>
+                                <span class="bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 px-3 py-1 rounded-full text-xs font-bold shadow-sm">High Priority</span>
+                            </div>
+
+                            <!-- Patient Info Card -->
+                            <div class="bg-gray-50 dark:bg-slate-800/50 rounded-xl p-5 border border-gray-100 dark:border-gray-700 relative">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center text-slate-400 shadow-sm border border-gray-100 dark:border-gray-600">
+                                            <i data-lucide="user" class="w-5 h-5"></i>
+                                        </div>
+                                        <h4 class="font-bold text-lg">John Smith</h4>
+                                    </div>
+                                    <span class="text-slate-400 text-xs uppercase font-medium tracking-wider">Stretcher</span>
+                                </div>
+                                
+                                <div class="space-y-3 text-sm">
+                                    <div class="grid grid-cols-[80px_1fr] items-center">
+                                        <span class="text-slate-500 text-xs font-semibold uppercase">From:</span>
+                                        <span class="font-medium text-slate-800 dark:text-slate-200">Ward A, Room 101</span>
+                                    </div>
+                                    <div class="grid grid-cols-[80px_1fr] items-center">
+                                        <span class="text-slate-500 text-xs font-semibold uppercase">To:</span>
+                                        <span class="font-medium text-slate-800 dark:text-slate-200">MRI (Floor 1)</span>
+                                    </div>
+                                    <div class="grid grid-cols-[80px_1fr] items-center">
+                                        <span class="text-slate-500 text-xs font-semibold uppercase">Support:</span>
+                                        <span class="font-medium text-slate-800 dark:text-slate-200">2 Staff</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex gap-3 mt-2">
+                                <button id="btn-pickup" onclick="confirmPickup()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white py-3.5 rounded-xl font-bold shadow-lg shadow-amber-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                                    <i data-lucide="check-circle" class="w-5 h-5"></i>
+                                    Confirm Pickup
+                                </button>
+                                <button id="btn-deliver" onclick="markDelivered()" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-xl font-bold shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 opacity-50 cursor-not-allowed" disabled>
+                                    <i data-lucide="package-check" class="w-5 h-5"></i>
+                                    Mark Delivered
+                                </button>
+                            </div>
+
+                            <!-- Status Panel -->
+                            <div class="bg-white dark:bg-card border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm mt-2">
+                                <div class="flex justify-between items-center mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">
+                                    <span class="text-sm font-bold text-slate-500">Timeline</span>
+                                    <span id="job-status-text" class="text-xs font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">Pending</span>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="text-slate-500">Pickup Time</span>
+                                        <span id="time-pickup" class="font-mono font-medium text-slate-800 dark:text-slate-200">--:--</span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="text-slate-500">Delivered Time</span>
+                                        <span id="time-deliver" class="font-mono font-medium text-slate-800 dark:text-slate-200">--:--</span>
+                                    </div>
+                                    <div class="border-t border-gray-100 dark:border-gray-700 pt-2 mt-2 text-right">
+                                        <p class="text-[10px] text-slate-400">Syncs with Nursing Dashboard</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
 
                 <!-- UPDATED: Routing View with Multi-Floor Map -->
@@ -469,27 +721,27 @@
                         </div>
                         <!-- Instructions & Stats -->
                         <div id="route-info" class="hidden bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 px-4 py-2 rounded-lg flex items-center gap-4">
-                             <div>
-                                 <p class="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold">Route</p>
-                                 <p class="text-sm font-bold text-primary" id="route-desc">Calculating...</p>
-                             </div>
-                             <div class="h-8 w-px bg-blue-200 dark:bg-blue-800"></div>
-                             <div>
-                                 <p class="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold">Instruction</p>
-                                 <p class="text-lg font-bold text-danger" id="route-instruction">Follow Line</p>
-                             </div>
+                            <div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold">Route</p>
+                                <p class="text-sm font-bold text-primary" id="route-desc">Calculating...</p>
+                            </div>
+                            <div class="h-8 w-px bg-blue-200 dark:bg-blue-800"></div>
+                            <div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold">Instruction</p>
+                                <p class="text-lg font-bold text-danger" id="route-instruction">Follow Line</p>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Floor Selector -->
                     <div class="px-6 pb-2 flex gap-2">
-                         <button onclick="switchFloor(0)" id="btn-floor-0" class="floor-btn px-4 py-2 rounded-lg text-sm font-bold border border-gray-200 dark:border-gray-700 bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Ground</button>
-                         <button onclick="switchFloor(1)" id="btn-floor-1" class="floor-btn px-4 py-2 rounded-lg text-sm font-bold border border-gray-200 dark:border-gray-700 bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Floor 1</button>
-                         <button onclick="switchFloor(2)" id="btn-floor-2" class="floor-btn px-4 py-2 rounded-lg text-sm font-bold border border-gray-200 dark:border-gray-700 bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Floor 2</button>
-                         <button onclick="switchFloor(3)" id="btn-floor-3" class="floor-btn px-4 py-2 rounded-lg text-sm font-bold border border-gray-200 dark:border-gray-700 bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Floor 3</button>
+                        <button onclick="switchFloor(0)" id="btn-floor-0" class="floor-btn px-4 py-2 rounded-lg text-sm font-bold border border-gray-200 dark:border-gray-700 bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Ground</button>
+                        <button onclick="switchFloor(1)" id="btn-floor-1" class="floor-btn px-4 py-2 rounded-lg text-sm font-bold border border-gray-200 dark:border-gray-700 bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Floor 1</button>
+                        <button onclick="switchFloor(2)" id="btn-floor-2" class="floor-btn px-4 py-2 rounded-lg text-sm font-bold border border-gray-200 dark:border-gray-700 bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Floor 2</button>
+                        <button onclick="switchFloor(3)" id="btn-floor-3" class="floor-btn px-4 py-2 rounded-lg text-sm font-bold border border-gray-200 dark:border-gray-700 bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Floor 3</button>
                     </div>
 
-                    <div class="flex-1 bg-white dark:bg-slate-900 m-4 rounded-xl shadow-inner border border-gray-200 dark:border-gray-800 relative overflow-hidden">
+                    <div class="flex-1 bg-white dark:bg-slate-900 m-4 rounded-xl shadow-inner border border-gray-200 dark:border-gray-800 relative overflow-hidden min-h-[400px]">
                         <!-- Placeholder -->
                         <div id="map-placeholder" class="absolute inset-0 flex flex-col items-center justify-center bg-white dark:bg-slate-900 z-10">
                             <i data-lucide="map" class="w-16 h-16 text-slate-300 mb-4"></i>
@@ -500,17 +752,38 @@
 
                         <!-- Dynamic Map Container -->
                         <div id="map-container" class="w-full h-full p-4">
-                             <!-- SVG Injected by JS -->
+                            <!-- SVG Injected by JS -->
                         </div>
 
                         <div class="absolute bottom-4 right-4 bg-white/90 dark:bg-card/90 p-2 rounded text-xs text-slate-500 font-mono pointer-events-none">
                             Current Level: <span id="current-level-label" class="font-bold">Ground</span>
                         </div>
                     </div>
+                    
+                    <!-- 3. Auto-Dispatch Algorithm Section -->
+                    <div class="mx-4 mb-4 bg-white dark:bg-card border border-gray-200 dark:border-gray-700 rounded-xl p-4">
+                        <h4 class="font-bold text-sm text-slate-800 dark:text-slate-200 mb-3 flex items-center gap-2">
+                            <i data-lucide="cpu" class="w-4 h-4 text-indigo-500"></i>
+                            Auto-Dispatch Logic
+                        </h4>
+                        <div class="flex flex-wrap items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
+                            <div class="bg-gray-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-600">
+                                <strong>Input:</strong> Patient Severity (4/5)
+                            </div>
+                            <span class="text-slate-300">+</span>
+                            <div class="bg-gray-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-600">
+                                <strong>Input:</strong> Transporter Proximity (<50m)
+                            </div>
+                            <span class="text-slate-300">→</span>
+                            <div class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-800 px-3 py-1.5 rounded-lg font-bold">
+                                Priority Assignment
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="view-settings" class="view-section hidden fade-in">
-                     <div class="bg-white dark:bg-card max-w-2xl mx-auto rounded-xl shadow-sm p-8">
+                    <div class="bg-white dark:bg-card max-w-2xl mx-auto rounded-xl shadow-sm p-8">
                         <h3 class="text-xl font-bold mb-6">System Settings</h3>
                         <div class="space-y-6">
                             <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-700">
@@ -524,7 +797,7 @@
                                 </button>
                             </div>
                         </div>
-                     </div>
+                    </div>
                 </div>
 
             </div>
@@ -535,7 +808,6 @@
         lucide.createIcons();
 
         // --- Data Models ---
-        
         // Updated Patients with specific Ward Locations matching new floors
         const patientsData = [
             { id: "P001", name: "John Smith", loc: "Ward A", severity: "Critical", needs: "2 Staff", mobility: "Stretcher", status: "Admitted", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=John", test: "MRI Scan", testTime: "Avg: 25 mins", checklist: ["Check for metal implants", "Verify patient identity", "Administer contrast if needed"] },
@@ -559,7 +831,6 @@
         // --- Updated Map Locations (4 Floors) ---
         // Coordinate Space: 800 x 600
         // Elevator is always at center: x=400, y=300
-        
         const mapLocations = {
             // Ground Floor (0)
             'ER': { x: 650, y: 450, floor: 0, w: 200, h: 150, color: 'red' },
@@ -601,29 +872,45 @@
         };
 
         // --- Navigation & UI Logic ---
-
         function navigate(viewId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
             const selectedView = document.getElementById(`view-${viewId}`);
             if(selectedView) selectedView.classList.remove('hidden');
 
             // Title updates...
-            const titles = { 'dashboard': 'Dashboard', 'patients': 'Patient Registry', 'profile': 'Patient Profile', 'routing': 'Hospital Routing', 'equipment': 'Equipment Tracker', 'complaints': 'Complaints', 'settings': 'Settings' };
+            const titles = {
+                'dashboard': 'Dashboard',
+                'patients': 'Patient Registry',
+                'profile': 'Patient Profile',
+                'routing': 'Hospital Routing',
+                'equipment': 'Equipment Tracker',
+                'complaints': 'Complaints',
+                'transporter': 'Transporter Mobile App',
+                'settings': 'Settings'
+            };
             document.getElementById('page-title').textContent = titles[viewId] || 'Dashboard';
 
             // Nav highlight logic...
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.classList.remove('bg-primary/10', 'text-primary', 'dark:bg-primary/20');
                 btn.classList.add('text-slate-600', 'dark:text-slate-400');
+
                 if(btn.getAttribute('onclick').includes(viewId) && viewId !== 'profile') {
-                     btn.classList.remove('text-slate-600', 'dark:text-slate-400');
-                     btn.classList.add('bg-primary/10', 'text-primary', 'dark:bg-primary/20');
+                    btn.classList.remove('text-slate-600', 'dark:text-slate-400');
+                    btn.classList.add('bg-primary/10', 'text-primary', 'dark:bg-primary/20');
                 }
             });
 
-            if(viewId === 'patients') { updateSeverityDropdown(); filterPatients(); }
-            if(viewId === 'equipment') { filterEquipment(); }
-            if(viewId === 'routing') { checkRoutingState(); }
+            if(viewId === 'patients') {
+                updateSeverityDropdown();
+                filterPatients();
+            }
+            if(viewId === 'equipment') {
+                filterEquipment();
+            }
+            if(viewId === 'routing') {
+                checkRoutingState();
+            }
 
             const sidebar = document.getElementById('sidebar');
             if (!sidebar.classList.contains('hidden') && window.innerWidth < 768) {
@@ -643,17 +930,24 @@
         }
 
         // --- Patient Logic ---
-        function updateSeverityDropdown() { /* Same as before */
-             const counts = patientsData.reduce((acc, p) => { acc[p.severity] = (acc[p.severity] || 0) + 1; return acc; }, {});
-             const select = document.getElementById('filter-severity');
-             select.innerHTML = `<option value="All">All Severities</option>` + Object.keys(counts).map(s => `<option value="${s}">${s} (${counts[s]})</option>`).join('');
+        function updateSeverityDropdown() {
+            /* Same as before */
+            const counts = patientsData.reduce((acc, p) => {
+                acc[p.severity] = (acc[p.severity] || 0) + 1;
+                return acc;
+            }, {});
+
+            const select = document.getElementById('filter-severity');
+            select.innerHTML = `<option value="All">All Severities</option>` + Object.keys(counts).map(s => `<option value="${s}">${s} (${counts[s]})</option>`).join('');
         }
 
-        function filterPatients() { /* Same as before */
+        function filterPatients() {
+            /* Same as before */
             const search = document.getElementById('patient-search').value.toLowerCase();
             const sev = document.getElementById('filter-severity').value;
             const ward = document.getElementById('filter-ward').value;
-            const filtered = patientsData.filter(p => 
+
+            const filtered = patientsData.filter(p =>
                 (p.name.toLowerCase().includes(search) || p.id.toLowerCase().includes(search)) &&
                 (sev === 'All' || p.severity === sev) &&
                 (ward === 'All' || p.loc.includes(ward))
@@ -664,6 +958,7 @@
         function renderPatientCards(patients) {
             const container = document.getElementById('patient-cards-container');
             container.innerHTML = patients.length ? '' : `<div class="text-center text-slate-400 py-8">No patients found.</div>`;
+
             patients.forEach(p => {
                 let color = p.severity === 'Critical' ? 'red' : p.severity === 'Severe' ? 'orange' : 'blue';
                 container.innerHTML += `
@@ -684,8 +979,8 @@
         function openPatientProfile(id) {
             const patient = patientsData.find(p => p.id === id);
             if (!patient) return;
-            currentPatientId = id;
 
+            currentPatientId = id;
             document.getElementById('profile-name').textContent = patient.name;
             document.getElementById('profile-id').textContent = `ID: ${patient.id}`;
             document.getElementById('profile-id-detail').textContent = patient.id;
@@ -710,9 +1005,10 @@
             lucide.createIcons();
         }
 
-        function filterEquipment() { /* Simplified for brevity */
-             const listEl = document.getElementById('equipment-list');
-             listEl.innerHTML = equipmentData.map(item => `
+        function filterEquipment() {
+            /* Simplified for brevity */
+            const listEl = document.getElementById('equipment-list');
+            listEl.innerHTML = equipmentData.map(item => `
                 <div class="p-4 border-b border-gray-100 dark:border-gray-700">
                     <div class="flex justify-between">
                         <h4 class="font-bold text-sm">${item.name}</h4>
@@ -720,20 +1016,19 @@
                     </div>
                     <div class="text-xs text-slate-500">${item.location}</div>
                 </div>
-             `).join('');
-             document.getElementById('eq-count').textContent = `${equipmentData.length} Items`;
+            `).join('');
+            document.getElementById('eq-count').textContent = `${equipmentData.length} Items`;
         }
 
         function findNearestEquipment() {
-            alert("Locating nearest available equipment..."); 
+            alert("Locating nearest available equipment...");
             // Logic same as before, simplified for char limit
         }
 
         // --- NEW MAP LOGIC (4 Floors) ---
-
         function switchFloor(floorIndex) {
             currentFloor = floorIndex;
-            
+
             // Update Buttons
             document.querySelectorAll('.floor-btn').forEach((btn, idx) => {
                 if(idx === floorIndex) btn.classList.add('active');
@@ -745,13 +1040,14 @@
             document.getElementById('current-level-label').textContent = labels[floorIndex];
 
             renderMap();
-            
+
             // Re-draw route if active
             if(currentPatientId) checkRoutingState();
         }
 
         function renderMap() {
             const container = document.getElementById('map-container');
+
             // Using template literals to build SVG
             let svgContent = `
                 <svg viewBox="0 0 800 600" class="w-full h-full" preserveAspectRatio="xMidYMid meet">
@@ -789,7 +1085,7 @@
 
             // 3. Path Placeholder (to be populated by JS)
             svgContent += `<path id="dynamic-path" d="" fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="path-line hidden" />`;
-            
+
             // 4. Markers
             svgContent += `<g id="start-marker" class="hidden"><circle r="8" fill="#ef4444" class="pulse-dot"/><circle r="4" fill="white"/></g>`;
             svgContent += `<g id="end-marker" class="hidden"><circle r="8" fill="#10b981"/><circle r="4" fill="white"/></g>`;
@@ -802,7 +1098,7 @@
         function checkRoutingState() {
             const placeholder = document.getElementById('map-placeholder');
             const routeInfo = document.getElementById('route-info');
-            
+
             if (!currentPatientId) {
                 placeholder.classList.remove('hidden');
                 routeInfo.classList.add('hidden');
@@ -814,7 +1110,7 @@
             routeInfo.classList.remove('hidden');
 
             const patient = patientsData.find(p => p.id === currentPatientId);
-            
+
             // 1. Determine Start Location & Floor
             // Map patient location string to our keys
             let startKey = 'ER'; // Default
@@ -822,7 +1118,7 @@
             else if(patient.loc.includes('Ward B')) startKey = 'Ward B';
             else if(patient.loc.includes('Ward C')) startKey = 'Ward C';
             else if(patient.loc.includes('Ward D')) startKey = 'Ward D';
-            
+
             const startNode = mapLocations[startKey];
 
             // 2. Determine End Location & Floor
@@ -849,19 +1145,20 @@
                 if(currentFloor !== startNode.floor) {
                     // User is viewing wrong floor
                     instruction.textContent = `Go to Floor ${startNode.floor}`;
-                    return; 
+                    return;
                 }
+
                 instruction.textContent = "Follow Path";
                 drawPath(startNode, endNode);
                 startMarker.classList.remove('hidden');
                 startMarker.setAttribute('transform', `translate(${startNode.x}, ${startNode.y})`);
                 endMarker.classList.remove('hidden');
                 endMarker.setAttribute('transform', `translate(${endNode.x}, ${endNode.y})`);
-            } 
+            }
             // SCENARIO B: Different Floors
             else {
                 const liftNode = mapLocations['Lift'];
-                
+
                 if (currentFloor === startNode.floor) {
                     // Step 1: Start -> Lift
                     instruction.textContent = `Take Lift to Floor ${endNode.floor}`;
@@ -870,7 +1167,7 @@
                     startMarker.setAttribute('transform', `translate(${startNode.x}, ${startNode.y})`);
                     liftMarker.classList.remove('hidden');
                     liftMarker.setAttribute('transform', `translate(${liftNode.x}, ${liftNode.y})`);
-                } 
+                }
                 else if (currentFloor === endNode.floor) {
                     // Step 2: Lift -> End
                     instruction.textContent = "Exit Lift & Follow Path";
@@ -879,7 +1176,7 @@
                     liftMarker.setAttribute('transform', `translate(${liftNode.x}, ${liftNode.y})`);
                     endMarker.classList.remove('hidden');
                     endMarker.setAttribute('transform', `translate(${endNode.x}, ${endNode.y})`);
-                } 
+                }
                 else {
                     // Viewing irrelevant floor
                     instruction.textContent = `Route is on Floors ${startNode.floor} & ${endNode.floor}`;
@@ -890,6 +1187,7 @@
         function drawPath(p1, p2) {
             const pathEl = document.getElementById('dynamic-path');
             pathEl.classList.remove('hidden');
+
             // Simple Manhattan routing: X then Y
             // Move to center first (x=400 or y=300) to avoid walls in a real app, but here simple L works
             // Logic: Move from P1 to Corridor Center (x=400, y=300) then to P2
@@ -897,8 +1195,65 @@
             pathEl.setAttribute('d', d);
         }
 
-        function resolveComplaint(id) { document.getElementById(id).remove(); }
-        function submitComplaint() { alert('Complaint Submitted'); }
+        function resolveComplaint(id) {
+            document.getElementById(id).remove();
+        }
+
+        function submitComplaint() {
+            alert('Complaint Submitted');
+        }
+
+        // --- Transporter App Logic ---
+        function confirmPickup() {
+            const btnPickup = document.getElementById('btn-pickup');
+            const btnDeliver = document.getElementById('btn-deliver');
+            const timePickup = document.getElementById('time-pickup');
+            const statusText = document.getElementById('job-status-text');
+
+            // Update UI
+            btnPickup.classList.add('opacity-50', 'cursor-not-allowed');
+            btnPickup.disabled = true;
+            btnPickup.innerHTML = `<i data-lucide="check" class="w-5 h-5"></i> Picked Up`;
+            
+            btnDeliver.classList.remove('opacity-50', 'cursor-not-allowed');
+            btnDeliver.disabled = false;
+
+            const now = new Date();
+            timePickup.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            timePickup.classList.add('text-amber-500', 'font-bold');
+            
+            statusText.textContent = "In Transit";
+            statusText.classList.remove('text-slate-400', 'bg-slate-100');
+            statusText.classList.add('text-amber-600', 'bg-amber-50', 'dark:bg-amber-900/20');
+            
+            lucide.createIcons();
+        }
+
+        function markDelivered() {
+            const btnDeliver = document.getElementById('btn-deliver');
+            const timeDeliver = document.getElementById('time-deliver');
+            const statusText = document.getElementById('job-status-text');
+
+            // Update UI
+            btnDeliver.classList.add('opacity-50', 'cursor-not-allowed');
+            btnDeliver.disabled = true;
+            btnDeliver.innerHTML = `<i data-lucide="check-check" class="w-5 h-5"></i> Delivered`;
+
+            const now = new Date();
+            timeDeliver.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            timeDeliver.classList.add('text-emerald-500', 'font-bold');
+
+            statusText.textContent = "Completed";
+            statusText.classList.remove('text-amber-600', 'bg-amber-50', 'dark:bg-amber-900/20');
+            statusText.classList.add('text-emerald-600', 'bg-emerald-50', 'dark:bg-emerald-900/20');
+
+            // Alert for demo
+            setTimeout(() => {
+                alert("Job T-001 Completed! Syncing data to central dashboard...");
+            }, 500);
+            
+            lucide.createIcons();
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -911,38 +1266,6 @@
             document.getElementById('patient-search').addEventListener('input', filterPatients);
             document.getElementById('filter-severity').addEventListener('change', filterPatients);
         });
-document.addEventListener("DOMContentLoaded", () => {
-    const popup = document.getElementById("welcome-popup");
-    const closeBtn = document.getElementById("popup-close");
-
-    // Fade in popup after slight delay for smoothness
-    setTimeout(() => {
-        popup.classList.remove("opacity-0", "pointer-events-none");
-        popup.firstElementChild.classList.remove("scale-95");
-    }, 200);
-
-    // Close animation
-    closeBtn.addEventListener("click", () => {
-        popup.classList.add("opacity-0", "pointer-events-none");
-        popup.firstElementChild.classList.add("scale-95");
-    });
-});
-
-
     </script>
-    <div id="welcome-popup" class="fixed inset-0 flex items-center justify-center z-[9999] bg-black/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
-  <div class="bg-white dark:bg-card p-8 rounded-2xl shadow-2xl w-[90%] max-w-sm transform scale-95 transition-transform duration-300">
-    <h2 class="text-2xl font-bold mb-3 text-slate-800 dark:text-slate-100">
-      RUSHI KI MKB
-    </h2>
-
-    <p class="text-slate-600 dark:text-slate-300 text-sm mb-6 leading-relaxed">
-      LUND LUND LUND GLIM GURGAON LUND.
-    </p>
-
-    <button id="popup-close" class="w-full bg-primary hover:bg-blue-700 text-white py-2.5 rounded-xl transition-all">
-      Continue
-    </button>
-  </div>
 </body>
 </html>
